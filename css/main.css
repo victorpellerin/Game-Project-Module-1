@@ -23,7 +23,6 @@ body {
 }
 
 #splash {
-  display: flex
   text-align: center;
 }
 
@@ -36,12 +35,12 @@ body {
 }
 
 #game {
-  display: flex
+  display: flex;
+  flex-wrap: wrap;
   text-align: center;  
 }
 
 #game-over {
-  display: flex
   text-align: center; 
 }
 
@@ -51,4 +50,8 @@ body {
 
 .play-again-btn {
      
+}
+
+.img-div {
+  display: flex;
 }

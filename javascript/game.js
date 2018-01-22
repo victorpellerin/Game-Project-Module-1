@@ -21,16 +21,15 @@ function shuffle(array) {
 }
 
 
+
 function Game(parentContainer, catalog) {
   var self = this;
 
   self.gameMainContainer = document.createElement('div');
-  self.gameMainContainer.setAttribute('class', 'game');
+  self.gameMainContainer.setAttribute('id', 'game');
   self.gameMainContainer.innerText = 'Game screen';
   parentContainer.appendChild(self.gameMainContainer);
 
-
-  //var flexContainer = ....
   
   var urls = catalog.concat(catalog);
 
@@ -44,18 +43,25 @@ function Game(parentContainer, catalog) {
     };
   })
 
-  // self.handleClick = function (event) {
-  //   console.log(event.target);
-  // }
+  self.handleClickImage = function (event) {
+    console.log(event.target);
+  }
 
-  // self.images.forEach(function (item) {
-    // item.element = new dom element (a div)
-    // var img is a new dom element (a img)
-    // the img src is item.url
-    // item.element.appendChild(img)
-    // flexContainer.appendChild(item.element);
-    // item.addEvent.. "click", self.handleClick
-  //})
+  self.images.forEach(function (item) {
+    item.element = document.createElement('div');
+    var img = document.createElement('img');
+    img.setAttribute('src', item.url);
+    item.element.appendChild(img);
+    self.gameMainContainer.appendChild(item.element);
+    item.element.addEventListener('click', self.handleClickImage);
+  })
+  // item.element = new dom element (a div)
+   
+  // var img is a new dom element (a img)
+  // the img src is item.url
+  // item.element.appendChild(img)
+  // flexContainer.appendChild(item.element);
+  // item.addEvent.. "click", self.handleClick
 }
 
 Game.prototype.destroy = function () {

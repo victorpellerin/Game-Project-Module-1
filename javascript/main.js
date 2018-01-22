@@ -3,15 +3,22 @@
 function main () {
 
   var generalMainContainer = document.querySelector('#site-main');
-
-//----- SPLASH -----//
-
-//1. Create Splash variables //
   var stage;
   var game;
-  var splashMainContainer;
 
-//2. Create buildSplash function----------------------// 
+
+
+  //----- SPLASH -----//
+
+  //1. Create Splash variables //
+  var splashMainContainer;
+  var startButton;
+  var startButtonBehaviour = function (){
+    destroySplash();
+    buildGame();
+  }
+
+  //2. Create buildSplash function----------------------// 
   function buildSplash () {
     stage = 'splash';
 
@@ -20,10 +27,10 @@ function main () {
     splashMainContainer.setAttribute('id', 'splash');
 
     var splashTitle = document.createElement('h1');
-    splashTitle.setAttribute('class', 'splash.title');
-    splashTitle.innerText = 'Memory Game';
+    splashTitle.setAttribute('class', 'splash-title');
+    splashTitle.innerText = 'Splash screen';
 
-    var startButton = document.createElement('button');
+    startButton = document.createElement('button');
     startButton.setAttribute('class', 'start-btn');
     startButton.innerText ='Start Game!!';
     
@@ -31,16 +38,93 @@ function main () {
     splashMainContainer.appendChild(splashTitle);
     splashMainContainer.appendChild(startButton);
 
-    generalMainContainer.appendChild(splashMainContainer)
+    generalMainContainer.appendChild(splashMainContainer);
 
     //2.3. Bind click to Start Button//
-    
+    startButton.addEventListener('click', startButtonBehaviour);
   }
-//3. Create destroySplash function//
-//     1.2.1. Unbind click from start button//
-//     1.2.2. Remove DOM elements 
 
-buildSplash();
+  //3. Create destroySplash function//
+  function destroySplash (){
+    startButton.removeEventListener('click', startButtonBehaviour);
+    splashMainContainer.remove();
+  } 
+
+
+
+
+
+  //----- GAME -----//
+
+  var gameMainContainer;
+
+  function buildGame() {
+    stage = 'game';
+    // game = new Game (generalMainContainer);
+    gameMainContainer = document.createElement('div');
+    gameMainContainer.setAttribute('class', 'game');
+    gameMainContainer.innerText = 'Game screen';
+    generalMainContainer.appendChild(gameMainContainer);
+  }
+
+
+  window.setTimeout( function() {
+    destroyGame();
+    buildGameOver();
+  }, 5000)  
+
+  function destroyGame() {
+    gameMainContainer.remove();  
+  }
+  
+
+
+
+
+
+  //----- GAME OVER -----//
+
+  //1. Create Game Over variables //
+  var gameOverMainContainer;
+  var playAgainButton;
+  var playAgainButtonBehaviour = function (){
+    destroyGameOver();
+    buildSplash();
+  }
+
+
+  function buildGameOver () {
+    stage = 'gameOver';
+
+    //2.1. Create DOM elements//
+    gameOverMainContainer = document.createElement('div');
+    gameOverMainContainer.setAttribute('id', 'game-over');
+
+    var gameOverTitle = document.createElement('h1');
+    gameOverTitle.setAttribute('class', 'game-over-title');
+    gameOverTitle.innerText = 'Game Over';
+
+    playAgainButton = document.createElement('button');
+    playAgainButton.setAttribute('class', 'play-again-btn');
+    playAgainButton.innerText ='Play Again!!';
+    
+    //2.2. Append elements to GO Main Container & GOMC to Game Main Container //
+    gameOverMainContainer.appendChild(gameOverTitle);
+    gameOverMainContainer.appendChild(playAgainButton);
+
+    generalMainContainer.appendChild(gameOverMainContainer);
+
+    //2.3. Bind click to Play Again Button//
+    playAgainButton.addEventListener('click', playAgainButtonBehaviour);
+  }
+
+  //3. Create destroyGameOver function//
+  function destroyGameOver (){
+    playAgainButton.removeEventListener('click', playAgainButtonBehaviour);
+    gameOverMainContainer.remove();
+  } 
+  
+  buildSplash();
 }
 
 window.onload = main();

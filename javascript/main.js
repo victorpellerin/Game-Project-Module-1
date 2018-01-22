@@ -60,11 +60,8 @@ function main () {
 
   function buildGame() {
     stage = 'game';
-    // game = new Game (generalMainContainer);
-    gameMainContainer = document.createElement('div');
-    gameMainContainer.setAttribute('class', 'game');
-    gameMainContainer.innerText = 'Game screen';
-    generalMainContainer.appendChild(gameMainContainer);
+    game = new Game(generalMainContainer, catalog);
+    
 
     window.setTimeout( function() {
       destroyGame();
@@ -73,7 +70,7 @@ function main () {
   }
 
   function destroyGame() {
-    gameMainContainer.remove(); 
+    game.destroy();
   }
   
 

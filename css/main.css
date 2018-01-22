@@ -1,0 +1,36 @@
+/* reset */
+
+html, body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0px;
+}
+
+*, 
+*:before, 
+*:after {
+  box-sizing: inherit;
+}
+
+
+body {
+    background-color: grey;
+    border: 1px solid blue;
+}
+
+#site-main {
+
+}
+
+#splash {
+    display: flex
+    text-align: center;
+}
+
+.splash-title {
+
+}
+
+.start-btn {
+    
+}

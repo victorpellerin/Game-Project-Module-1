@@ -65,16 +65,15 @@ function main () {
     gameMainContainer.setAttribute('class', 'game');
     gameMainContainer.innerText = 'Game screen';
     generalMainContainer.appendChild(gameMainContainer);
+
+    window.setTimeout( function() {
+      destroyGame();
+      buildGameOver();
+    }, 5000);
   }
 
-
-  window.setTimeout( function() {
-    destroyGame();
-    buildGameOver();
-  }, 5000)  
-
   function destroyGame() {
-    gameMainContainer.remove();  
+    gameMainContainer.remove(); 
   }
   
 

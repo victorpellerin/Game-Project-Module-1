@@ -35,9 +35,19 @@ body {
 }
 
 #game {
+  text-align: center;  
+}
+
+.game-title {
+  height: 50px;
+  padding-top: 15px;
+  background-color: azure;
+}
+
+.flex-box {
   display: flex;
   flex-wrap: wrap;
-  text-align: center;  
+  justify-content: center;
 }
 
 #game-over {

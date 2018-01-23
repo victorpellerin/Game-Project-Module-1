@@ -44,25 +44,40 @@ function Game(parentContainer, catalog) {
     };
   })
 
-  self.guess1;
-  self.guess2;
+  self.guess1 = [];  /*1st index is the img src and 2nd is the element*/
   self.count = 0;
 
   self.handleClickImage = function (event) {
+    var imgSrc = event.target.src;
+    var imgParentElement = event.target.parentElement;
     if (self.count === 0){
-      self.guess1 = event.target.src;
+      // Show image
+      // Remove Event Listener
+      self.guess1[0] = imgSrc;
+      self.guess1[1] = imgParentElement;
       self.count++;
-      console.log('primera imagen')
-    } else {
-      if (self.guess1 === event.target.src){
-        self.count = 0;
-        console.log('pareja')
-      } else {
-        self.count = 0;
-        console.log('no son pareja')
+      console.log('first image')
+    } 
+    else {
+      if (self.guess1[0] === imgSrc && self.guess1[1] !== imgParentElement){
+        imgParentElement.setAttribute('class', 'hidden');
+        // Remove event listener
+        // Put a filter in both pictures
+
+        console.log('That is a pair!!')
+      } 
+      else if (self.guess1[0] === imgSrc && self.guess1[1] === imgParentElement){
+        console.log('exactly same image. same div')
       }
+      else {
+        // Set TimeOut to hide both cards
+        console.log('not a pair')
+      }
+      self.count = 0;
 
     }
+    
+    // Set general Time Out that depends on the level of the game
 
     console.log(event.target);
     //if count == 0 -> guardo imagen; aumento count += 1

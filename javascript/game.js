@@ -13,7 +13,6 @@ function shuffle(array) {
 }
 
 
-
 function Game(parentContainer, catalog) {
   var self = this;
 
@@ -57,42 +56,40 @@ function Game(parentContainer, catalog) {
     var imgParentElement = event.target.parentElement;
     if (count === 0){
       // Show image
-      // Remove Event Listener
-      imgParentElement.removeEventListener('click', self.handleClickImage);
       guess1[0] = imgSrc;
       guess1[1] = imgParentElement;
       count++;
       console.log('first image')
     } 
     else {
-      if (guess1[0] === imgSrc && guess1[1] !== imgParentElement){
+      if (guess1[0] === imgSrc && guess1[1] !== imgParentElement){ 
         imgParentElement.setAttribute('class', 'hidden');
         guess1[1].setAttribute('class', 'hidden');
-        // Remove event listener
+        imgParentElement.removeEventListener('click', self.handleClickImage);
         // Put a filter in both pictures
         pairCount++
           if (pairCount === self.images.length/2){
-            self.destroy(); // ===============================> GO TO NEXT LEVEL
-          } else {}
+            self.destroy(); 
+            new Game(parentContainer, catalog); // ===============================> GO TO NEXT LEVEL
+          } else {
+          }
         console.log('That is a pair!!')
-      } 
-      else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
-        console.log('exactly same image. same div')
+      // } 
+      // else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
+      //   console.log('exactly same image. same div')
       }
       else {
         // Set TimeOut to hide both cards
         console.log('not a pair')
       }
       count = 0;
-
     }
-
     console.log(event.target);
   }
 
   self.images.forEach(function (item) {
     item.element = document.createElement('div');
-    item.element.setAttribute('class','flex-box');
+    item.element.setAttribute('class','img-div');
     var img = document.createElement('img');
     img.setAttribute('src', item.url);
     item.element.appendChild(img);

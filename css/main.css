@@ -51,7 +51,7 @@ body {
 }
 
 .hidden {
-  display: none;
+  opacity: 0.5;
 }
 
 #game-over {
@@ -67,5 +67,4 @@ body {
 }
 
 .img-div {
-  display: flex;
 }

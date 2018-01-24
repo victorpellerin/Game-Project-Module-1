@@ -60,7 +60,7 @@ function main () {
 
   function buildGame() {
     stage = 'game';
-    game = new Game(generalMainContainer, catalog);
+    game = new Game(generalMainContainer, levels);
     
 
     window.setTimeout( function() {

@@ -13,17 +13,63 @@ function shuffle(array) {
 }
 
 
-function Game(parentContainer, catalog) {
+function Game(parentContainer, levels) {
   var self = this;
+  
+  self.parentContainer = parentContainer;
+  self.level = 0;
+  self.levels = levels;
 
   // Set general Time Out that depends on the level of the game
   // window.setTimeout( function() {
   //   self.destroy();
   // }, 5000);
 
+  self.handleClickImage = function (event) {
+    var imgSrc = event.target.src;
+    var imgParentElement = event.target.parentElement;
+    if (self.count === 0){
+      // Show image
+      self.guess1[0] = imgSrc;
+      self.guess1[1] = imgParentElement;
+      self.count++;
+      console.log('first image')
+    } 
+    else {
+      if (self.guess1[0] === imgSrc && self.guess1[1] !== imgParentElement){ 
+        imgParentElement.setAttribute('class', 'hidden');
+        self.guess1[1].setAttribute('class', 'hidden');
+        imgParentElement.removeEventListener('click', self.handleClickImage);
+        // Put a filter in both pictures
+        self.pairCount++
+        if (self.pairCount === self.images.length/2){
+          self.nextLevel();
+        }
+        console.log('That is a pair!!')
+        // } 
+        // else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
+        //   console.log('exactly same image. same div')
+      }
+      else {
+        // Set TimeOut to hide both cards
+        console.log('not a pair')
+      }
+      self.count = 0;
+    }
+    console.log(event.target);
+  }
+
+  self.buildDom();
+  self.buildLevel();
+
+}
+
+Game.prototype.buildDom = function () {
+  var self = this;
+
   self.gameMainContainer = document.createElement('div');
   self.gameMainContainer.setAttribute('id', 'game');
-  parentContainer.appendChild(self.gameMainContainer);
+  self.parentContainer.appendChild(self.gameMainContainer);
 
   self.titleContainer = document.createElement('div');
   self.titleContainer.setAttribute('class','game-title');
@@ -31,11 +77,37 @@ function Game(parentContainer, catalog) {
   self.gameMainContainer.appendChild(self.titleContainer);
 
 
-  var flexBoxContainer = document.createElement('div');
-  flexBoxContainer.setAttribute('class','flex-box');
-  self.gameMainContainer.appendChild(flexBoxContainer);
+  self.flexBoxContainer = document.createElement('div');
+  self.flexBoxContainer.setAttribute('class','flex-box');
+  self.gameMainContainer.appendChild(self.flexBoxContainer);
+}
 
-  var urls = catalog.concat(catalog);
+Game.prototype.nextLevel = function () {
+  var self = this;
+
+  self.destroyLevel();
+  self.level++;
+  self.buildLevel();
+};
+
+Game.prototype.destroyLevel = function () {
+  var self = this;
+
+  // clear the level timer
+
+  self.images.forEach(function (item) {
+    item.element.remove();
+  })
+};
+
+Game.prototype.buildLevel = function () {
+  var self = this;
+
+  self.guess1 = [];  /*1st index is the img src and 2nd is the element*/
+  self.count = 0;
+  self.pairCount = 0;
+
+  var urls = self.levels[self.level].catalog.concat(self.levels[self.level].catalog);
 
   var shuffled = shuffle(urls);
 
@@ -47,60 +119,25 @@ function Game(parentContainer, catalog) {
     };
   })
 
-  var guess1 = [];  /*1st index is the img src and 2nd is the element*/
-  var count = 0;
-  var pairCount = 0;
-
-  self.handleClickImage = function (event) {
-    var imgSrc = event.target.src;
-    var imgParentElement = event.target.parentElement;
-    if (count === 0){
-      // Show image
-      guess1[0] = imgSrc;
-      guess1[1] = imgParentElement;
-      count++;
-      console.log('first image')
-    } 
-    else {
-      if (guess1[0] === imgSrc && guess1[1] !== imgParentElement){ 
-        imgParentElement.setAttribute('class', 'hidden');
-        guess1[1].setAttribute('class', 'hidden');
-        imgParentElement.removeEventListener('click', self.handleClickImage);
-        // Put a filter in both pictures
-        pairCount++
-          if (pairCount === self.images.length/2){
-            self.destroy(); 
-            new Game(parentContainer, catalog); // ===============================> GO TO NEXT LEVEL
-          } else {
-          }
-        console.log('That is a pair!!')
-      // } 
-      // else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
-      //   console.log('exactly same image. same div')
-      }
-      else {
-        // Set TimeOut to hide both cards
-        console.log('not a pair')
-      }
-      count = 0;
-    }
-    console.log(event.target);
-  }
-
   self.images.forEach(function (item) {
     item.element = document.createElement('div');
     item.element.setAttribute('class','img-div');
     var img = document.createElement('img');
     img.setAttribute('src', item.url);
     item.element.appendChild(img);
-    flexBoxContainer.appendChild(item.element);
+    self.flexBoxContainer.appendChild(item.element);
     item.element.addEventListener('click', self.handleClickImage);
   })
+
+  // start the level timer internval
+
 }
 
 Game.prototype.destroy = function () {
   var self = this;
   self.gameMainContainer.remove();
+
+  // clear interval for level timer here
 }
 
 

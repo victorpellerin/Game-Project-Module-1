@@ -63,10 +63,10 @@ function main () {
     game = new Game(generalMainContainer, catalog);
     
 
-    // window.setTimeout( function() {
-    //   destroyGame();
-    //   buildGameOver();
-    // }, 5000);
+    window.setTimeout( function() {
+      destroyGame();
+      buildGameOver();
+    }, 50000);
 
   }
 

@@ -17,9 +17,13 @@ function shuffle(array) {
 function Game(parentContainer, catalog) {
   var self = this;
 
+  // Set general Time Out that depends on the level of the game
+  // window.setTimeout( function() {
+  //   self.destroy();
+  // }, 5000);
+
   self.gameMainContainer = document.createElement('div');
   self.gameMainContainer.setAttribute('id', 'game');
-  // self.gameMainContainer.innerText = 'Game screen';
   parentContainer.appendChild(self.gameMainContainer);
 
   self.titleContainer = document.createElement('div');
@@ -44,44 +48,46 @@ function Game(parentContainer, catalog) {
     };
   })
 
-  self.guess1 = [];  /*1st index is the img src and 2nd is the element*/
-  self.count = 0;
+  var guess1 = [];  /*1st index is the img src and 2nd is the element*/
+  var count = 0;
+  var pairCount = 0;
 
   self.handleClickImage = function (event) {
     var imgSrc = event.target.src;
     var imgParentElement = event.target.parentElement;
-    if (self.count === 0){
+    if (count === 0){
       // Show image
       // Remove Event Listener
-      self.guess1[0] = imgSrc;
-      self.guess1[1] = imgParentElement;
-      self.count++;
+      imgParentElement.removeEventListener('click', self.handleClickImage);
+      guess1[0] = imgSrc;
+      guess1[1] = imgParentElement;
+      count++;
       console.log('first image')
     } 
     else {
-      if (self.guess1[0] === imgSrc && self.guess1[1] !== imgParentElement){
+      if (guess1[0] === imgSrc && guess1[1] !== imgParentElement){
         imgParentElement.setAttribute('class', 'hidden');
+        guess1[1].setAttribute('class', 'hidden');
         // Remove event listener
         // Put a filter in both pictures
-
+        pairCount++
+          if (pairCount === self.images.length/2){
+            self.destroy(); // ===============================> GO TO NEXT LEVEL
+          } else {}
         console.log('That is a pair!!')
       } 
-      else if (self.guess1[0] === imgSrc && self.guess1[1] === imgParentElement){
+      else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
         console.log('exactly same image. same div')
       }
       else {
         // Set TimeOut to hide both cards
         console.log('not a pair')
       }
-      self.count = 0;
+      count = 0;
 
     }
-    
-    // Set general Time Out that depends on the level of the game
 
     console.log(event.target);
-    //if count == 0 -> guardo imagen; aumento count += 1
-    // else -> comparo imagenes
   }
 
   self.images.forEach(function (item) {

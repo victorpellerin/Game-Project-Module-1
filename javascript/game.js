@@ -67,14 +67,19 @@ function Game(parentContainer, levels) {
 Game.prototype.buildDom = function () {
   var self = this;
 
+  self.header = document.createElement('header');
+  self.header.setAttribute('class','header');
+  self.header.innerText = 'GAME SCREEN';
+  self.parentContainer.appendChild(self.header);
+
   self.gameMainContainer = document.createElement('div');
   self.gameMainContainer.setAttribute('id', 'game');
   self.parentContainer.appendChild(self.gameMainContainer);
 
-  self.titleContainer = document.createElement('div');
-  self.titleContainer.setAttribute('class','game-title');
-  self.titleContainer.innerText = 'GAME SCREEN';
-  self.gameMainContainer.appendChild(self.titleContainer);
+  // self.titleContainer = document.createElement('div');
+  // self.titleContainer.setAttribute('class','game-title');
+  // self.titleContainer.innerText = 'GAME SCREEN';
+  // self.gameMainContainer.appendChild(self.titleContainer);
 
 
   self.flexBoxContainer = document.createElement('div');

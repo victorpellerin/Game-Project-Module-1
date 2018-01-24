@@ -4,6 +4,7 @@ html, body {
   box-sizing: border-box;
   margin: 0;
   padding: 0px;
+  font-family: 'Orbitron', sans-serif;
 }
 
 *, 
@@ -16,26 +17,56 @@ html, body {
 body {
   background-color: grey;
   border: 1px solid blue;
+  background: url(../img/background2.jpg);
+  background-position:center;
 }
 
 #site-main {
 
 }
 
-#splash {
+#splash,
+#game-over {
+  border: 1px solid red;
   text-align: center;
+  font-size: 25px;
+  color: white;
+  margin-top: 100px;
 }
 
 .splash-title {
   
 }
 
-.start-btn {
-
+.start-btn,
+.play-again-btn {
+  background-color: white
+  border-style: solid;
+  border-color: transparent;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  padding: 10px;
+  border-radius: 15px;
 }
 
 #game {
-  text-align: center;  
+  margin-top: 75px;
+  padding-left: 10%;
+  padding-right: 10%;
+  border: 1px solid red;
+  text-align: center;
+  font-size: 25px;
+  color: white;
+}
+
+.header {
+  position: fixed;
+  height: 75px;
+  width: 100%;
+  background-color: black;
+  color: white;
+  font-size: 25px;
+  top: 0;
 }
 
 .game-title {
@@ -51,20 +82,15 @@ body {
 }
 
 .hidden {
+  margin: 15px;
   opacity: 0.5;
-}
-
-#game-over {
-  text-align: center; 
 }
 
 .game-over-title {
 
 }
 
-.play-again-btn {
-     
-}
 
 .img-div {
+  margin: 15px;
 }

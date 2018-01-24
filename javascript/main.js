@@ -28,7 +28,7 @@ function main () {
 
     var splashTitle = document.createElement('h1');
     splashTitle.setAttribute('class', 'splash-title');
-    splashTitle.innerText = 'Splash screen';
+    splashTitle.innerText = 'Space Memory Game';
 
     startButton = document.createElement('button');
     startButton.setAttribute('class', 'start-btn');
@@ -63,10 +63,10 @@ function main () {
     game = new Game(generalMainContainer, levels);
     
 
-    window.setTimeout( function() {
-      destroyGame();
-      buildGameOver();
-    }, 50000);
+    // window.setTimeout( function() {
+    //   destroyGame();
+    //   buildGameOver();
+    // }, 5000);
 
   }
 

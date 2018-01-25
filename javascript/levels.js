@@ -3,7 +3,7 @@
 var levels = [
 
   { level: 0,
-    timer: 35000,
+    timer: 100000,
     catalog: ['./img/img1.jpeg', './img/img2.jpeg', './img/img3.jpeg'] },
 
   { level: 1,

@@ -62,7 +62,10 @@ function main () {
     stage = 'game';
     game = new Game(generalMainContainer, levels);
     
-
+    game.onGameOver(function(){
+      destroyGame();
+      buildGameOver();
+    })
     // window.setTimeout( function() {
     //   destroyGame();
     //   buildGameOver();
@@ -70,12 +73,10 @@ function main () {
 
   }
 
+
   function destroyGame() {
     game.destroy();
   }
-  
-
-
 
 
 
@@ -122,6 +123,9 @@ function main () {
   } 
   
   buildSplash();
+
+
+
 }
 
 window.onload = main();

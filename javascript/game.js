@@ -20,16 +20,14 @@ function Game(parentContainer, levels) {
   self.level = 0;
   self.levels = levels;
 
-  // Set general Time Out that depends on the level of the game
-  // window.setTimeout( function() {
-  //   self.destroy();
-  // }, 5000);
-
   self.handleClickImage = function (event) {
-    var imgSrc = event.target.src;
-    var imgParentElement = event.target.parentElement;
+
+    var imgSrc = event.target.children[0].src;
+    var imgParentElement = event.target;
+
     if (self.count === 0){
-      // Show image
+      self.imgOne = event.target.children[0];
+      self.imgOne.setAttribute('class', 'image-shown');
       self.guess1[0] = imgSrc;
       self.guess1[1] = imgParentElement;
       self.count++;
@@ -37,26 +35,33 @@ function Game(parentContainer, levels) {
     } 
     else {
       if (self.guess1[0] === imgSrc && self.guess1[1] !== imgParentElement){ 
+        self.imgTwo = event.target.children[0];
+        self.imgTwo.setAttribute('class', 'image-shown');
         imgParentElement.setAttribute('class', 'hidden');
         self.guess1[1].setAttribute('class', 'hidden');
         imgParentElement.removeEventListener('click', self.handleClickImage);
-        // Put a filter in both pictures
         self.pairCount++
-        if (self.pairCount === self.images.length/2){
-          self.nextLevel();
-        }
         console.log('That is a pair!!')
+          if (self.pairCount === self.images.length/2){
+            self.nextLevel();
+          } else {}
+          
         // } 
         // else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
         //   console.log('exactly same image. same div')
       }
       else {
-        // Set TimeOut to hide both cards
+        self.imgTwo = event.target.children[0];
+        self.imgTwo.setAttribute('class', 'image-shown');
+        setTimeout (function(){
+          self.imgOne.setAttribute('class', 'image-hidden');
+          self.imgTwo.setAttribute('class', 'image-hidden');
+        }, 1000)
         console.log('not a pair')
       }
       self.count = 0;
     }
-    console.log(event.target);
+    console.log(event.target.children[0]);
   }
 
   self.buildDom();
@@ -65,26 +70,46 @@ function Game(parentContainer, levels) {
 }
 
 Game.prototype.buildDom = function () {
-  var self = this;
-
-  self.header = document.createElement('header');
-  self.header.setAttribute('class','header');
-  self.header.innerText = 'GAME SCREEN';
-  self.parentContainer.appendChild(self.header);
+    var self = this;
 
   self.gameMainContainer = document.createElement('div');
   self.gameMainContainer.setAttribute('id', 'game');
   self.parentContainer.appendChild(self.gameMainContainer);
 
-  // self.titleContainer = document.createElement('div');
-  // self.titleContainer.setAttribute('class','game-title');
-  // self.titleContainer.innerText = 'GAME SCREEN';
-  // self.gameMainContainer.appendChild(self.titleContainer);
+  self.header = document.createElement('div');
+  self.header.setAttribute('class','header-container');
+  self.parentContainer.appendChild(self.header);
 
+  self.timerContainer = document.createElement('div');
+  self.timerContainer.setAttribute('class','timer-container');
+  self.header.appendChild(self.timerContainer);
 
-  self.flexBoxContainer = document.createElement('div');
-  self.flexBoxContainer.setAttribute('class','flex-box');
-  self.gameMainContainer.appendChild(self.flexBoxContainer);
+  self.timeLabel = document.createElement('div');
+  self.timeLabel.setAttribute('class','timer-label');
+  self.timeLabel.innerText = 'time: ';
+  self.timerContainer.appendChild(self.timeLabel);
+
+  self.timerPrint = document.createElement('div');
+  self.timerPrint.setAttribute('class','timer-print');
+  self.timerContainer.appendChild(self.timerPrint);
+
+  self.levelContainer = document.createElement('div');
+  self.levelContainer.setAttribute('class','level-container');
+  self.levelContainer.innerText = 'LEVEL';
+  self.header.appendChild(self.levelContainer);
+
+  self.scoreContainer = document.createElement('div');
+  self.scoreContainer.setAttribute('class','score-container');
+  self.header.appendChild(self.scoreContainer);
+
+  self.scoreLabel = document.createElement('div');
+  self.scoreLabel.setAttribute('class','score-label');
+  self.scoreLabel.innerText = 'score';
+  self.scoreContainer.appendChild(self.scoreLabel);
+
+  self.scorePrint = document.createElement('div');
+  self.scorePrint.setAttribute('class','score-print');
+  self.parentContainer.appendChild(self.scorePrint);
 }
 
 Game.prototype.nextLevel = function () {
@@ -98,7 +123,9 @@ Game.prototype.nextLevel = function () {
 Game.prototype.destroyLevel = function () {
   var self = this;
 
-  // clear the level timer
+  clearInterval(self.countdown);
+
+  self.flexBoxContainer.remove();
 
   self.images.forEach(function (item) {
     item.element.remove();
@@ -107,6 +134,10 @@ Game.prototype.destroyLevel = function () {
 
 Game.prototype.buildLevel = function () {
   var self = this;
+
+  self.flexBoxContainer = document.createElement('div');
+  self.flexBoxContainer.setAttribute('class','flex-box');
+  self.gameMainContainer.appendChild(self.flexBoxContainer);
 
   self.guess1 = [];  /*1st index is the img src and 2nd is the element*/
   self.count = 0;
@@ -129,58 +160,38 @@ Game.prototype.buildLevel = function () {
     item.element.setAttribute('class','img-div');
     var img = document.createElement('img');
     img.setAttribute('src', item.url);
+    img.setAttribute('class', 'image-hidden');
     item.element.appendChild(img);
     self.flexBoxContainer.appendChild(item.element);
     item.element.addEventListener('click', self.handleClickImage);
-  })
+  } )
 
   // start the level timer internval
+  self.timeOfLevel = self.levels[self.level].timer;
+  self.countdown = setInterval(function() { 
+    if (self.timeOfLevel >= 0) {
+      self.timerPrint.innerText = Math.floor(self.timeOfLevel/1000);
+    } 
+    else {  
+      self.onEnded();  
+    }
+
+  self.timeOfLevel = self.timeOfLevel-1000;
+  }, 1000);
+
+  // self.timerPrint.innerText = self.timeOfLevel/1000 + 's';
 
 }
 
 Game.prototype.destroy = function () {
   var self = this;
+  clearInterval(self.countdown);
   self.gameMainContainer.remove();
-
-  // clear interval for level timer here
+  self.header.remove();
 }
 
+Game.prototype.onGameOver = function (callback){
+  var self = this;
+  self.onEnded = callback;
+}
 
-
-// var Base=function(){
-//   function a(a){this.pageParams=a}
-//   return a.prototype.init=function(){
-//     this.handleEvents()},
-
-//   a.prototype.handleEvents=function(){
-//     this.handleVisibility(),
-//     this.handleFilters(),
-//     this.handleAds()},
-
-//     a.prototype.handleVisibility=function(){
-//       $(".switch-visibility").on("click",function(){
-//         var a=$(this).attr("data-show-class");
-//         var b=$(this).attr("data-hidden-class");
-//         void 0!=a&&void 0!=b&&($("body").find("."+a).removeClass("hidden").addClass("show"),
-//         $("body").find("."+b).removeClass("show").addClass("hidden"))
-//       }
-//     )},
-
-//         a.prototype.handleFilters=function(){
-//           $(".filter-box").click(function(){
-//             $(this).parent().hasClass("active")?"filter-all"!=$(this).attr("id")&&($(this).parent().removeClass("active"),
-//             $("."+$(this).attr("id")).hide(),
-//             $("."+$(this).attr("id")).each(function(a,b){var c=$(b).attr("class");
-//             c=c.split(" ");
-//             for(var d=0;d<c.length;d++)$("#"+c[d]).parent().hasClass("active")&&$(b).show()}),
-//             $(".filter-box").parent().hasClass("active")||($("#filter-all").parent().addClass("active"),
-//             $(".filter").show())):"filter-all"==$(this).attr("id")?($(".filter-box").parent().removeClass("active"),
-//             $("#filter-all").parent().addClass("active"),
-//             $(".filter").show()):($("#filter-all").parent().hasClass("active")&&($("#filter-all").parent().removeClass("active"),
-//             $(".filter").hide()),
-//             $(this).parent().addClass("active"),
-//             $("."+$(this).attr("id")).show())})},
-//             a.prototype.handleAds=function(){$(document.body).click(function(a){a.target==this&&void 0!=jsVars.custom_style_bg_link&&window.open(jsVars.custom_style_bg_link,
-//               "_blank")}),
-//               $(document.body).mouseover(function(a){a.target==this&&void 0!=jsVars.custom_style_bg_link?$(this).css("cursor","pointer"):$(this).css("cursor","default")})},
-//               a}();

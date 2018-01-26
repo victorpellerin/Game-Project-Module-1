@@ -32,7 +32,7 @@ function Game(parentContainer, levels) {
       imgParentElement.removeEventListener('click', self.handleClickImage);
       setTimeout (function(){
         imgParentElement.addEventListener('click', self.handleClickImage);
-      }, 800)
+      }, 200)
       self.imgOne.setAttribute('class', 'image-shown');
       self.guess1[0] = imgSrc;
       self.guess1[1] = imgParentElement;
@@ -66,7 +66,7 @@ function Game(parentContainer, levels) {
         setTimeout (function(){
           self.imgOne.setAttribute('class', 'image-hidden');
           self.imgTwo.setAttribute('class', 'image-hidden');
-        }, 800)
+        }, 200)
         // console.log('not a pair')
       }
       self.count = 0;

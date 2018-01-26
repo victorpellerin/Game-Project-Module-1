@@ -91,7 +91,7 @@ body {
 }
 
 .timer-print {
-  width: 45px;
+  width: 70px;
   margin-left: 10px;
 }
 
@@ -101,10 +101,11 @@ body {
   float: left;
   text-align: center;
   border: 1px solid white;
+  font-size: 35px;
 }
 
 .score-container {
-  display: block;
+  display: flex;
   float: right;
   border: 1px solid white;
 }
@@ -114,7 +115,8 @@ body {
 }
 
 .score-print {
-
+  width: 80px;
+  margin-left: 20px;
 }
 
 .game-title {
@@ -147,8 +149,8 @@ img {
   background: url(../img/ironhack.png);
   background-size: contain;
   margin: 15px;
-  height: 202px;
-  width: 202px;
+  height: 200px;
+  width: 200px;
 }
 
 .image-hidden {

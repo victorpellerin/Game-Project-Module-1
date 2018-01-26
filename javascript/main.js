@@ -1,5 +1,7 @@
 'use strict'
 
+var SCORE;
+
 function main () {
 
   var generalMainContainer = document.querySelector('#site-main');
@@ -21,6 +23,7 @@ function main () {
   //2. Create buildSplash function----------------------// 
   function buildSplash () {
     stage = 'splash';
+    SCORE = 0;
 
     //2.1. Create DOM elements//
     splashMainContainer = document.createElement('div');
@@ -94,6 +97,8 @@ function main () {
   function buildGameOver () {
     stage = 'gameOver';
 
+    if (isNaN(SCORE)){SCORE = 0};
+
     //2.1. Create DOM elements//
     gameOverMainContainer = document.createElement('div');
     gameOverMainContainer.setAttribute('id', 'game-over');
@@ -101,13 +106,17 @@ function main () {
     var gameOverTitle = document.createElement('h1');
     gameOverTitle.setAttribute('class', 'game-over-title');
     gameOverTitle.innerText = 'Game Over';
+    gameOverMainContainer.appendChild(gameOverTitle);
+
+    var yourScore = document.createElement('div');
+    yourScore.setAttribute('class', 'your-score');
+    yourScore.innerText = 'your score: ' + SCORE;
+    gameOverMainContainer.appendChild(yourScore);
+
 
     playAgainButton = document.createElement('button');
     playAgainButton.setAttribute('class', 'play-again-btn');
     playAgainButton.innerText ='Play Again!!';
-    
-    //2.2. Append elements to GO Main Container & GOMC to Game Main Container //
-    gameOverMainContainer.appendChild(gameOverTitle);
     gameOverMainContainer.appendChild(playAgainButton);
 
     generalMainContainer.appendChild(gameOverMainContainer);

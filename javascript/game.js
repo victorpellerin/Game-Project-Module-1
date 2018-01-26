@@ -16,6 +16,8 @@ function shuffle(array) {
 function Game(parentContainer, levels) {
   var self = this;
   
+  self.timeScore = 0;
+  self.clickCount = 0;
   self.parentContainer = parentContainer;
   self.level = 0;
   self.levels = levels;
@@ -27,11 +29,15 @@ function Game(parentContainer, levels) {
 
     if (self.count === 0){
       self.imgOne = event.target.children[0];
+      imgParentElement.removeEventListener('click', self.handleClickImage);
+      setTimeout (function(){
+        imgParentElement.addEventListener('click', self.handleClickImage);
+      }, 800)
       self.imgOne.setAttribute('class', 'image-shown');
       self.guess1[0] = imgSrc;
       self.guess1[1] = imgParentElement;
       self.count++;
-      console.log('first image')
+      // console.log('first image')
     } 
     else {
       if (self.guess1[0] === imgSrc && self.guess1[1] !== imgParentElement){ 
@@ -41,8 +47,12 @@ function Game(parentContainer, levels) {
         self.guess1[1].setAttribute('class', 'hidden');
         imgParentElement.removeEventListener('click', self.handleClickImage);
         self.pairCount++
-        console.log('That is a pair!!')
+        // console.log('That is a pair!!')
           if (self.pairCount === self.images.length/2){
+            self.timeScoreF();
+            // console.log(self.timeScore);
+            self.score();
+            console.log(SCORE);
             self.nextLevel();
           } else {}
           
@@ -56,16 +66,17 @@ function Game(parentContainer, levels) {
         setTimeout (function(){
           self.imgOne.setAttribute('class', 'image-hidden');
           self.imgTwo.setAttribute('class', 'image-hidden');
-        }, 1000)
-        console.log('not a pair')
+        }, 800)
+        // console.log('not a pair')
       }
       self.count = 0;
     }
-    console.log(event.target.children[0]);
+    // console.log(event.target.children[0]);
   }
 
   self.buildDom();
   self.buildLevel();
+  self.clickScore();
 
 }
 
@@ -95,7 +106,7 @@ Game.prototype.buildDom = function () {
 
   self.levelContainer = document.createElement('div');
   self.levelContainer.setAttribute('class','level-container');
-  self.levelContainer.innerText = 'LEVEL';
+  self.levelContainer.innerText = 'LEVEL ' + (self.level+1);
   self.header.appendChild(self.levelContainer);
 
   self.scoreContainer = document.createElement('div');
@@ -104,12 +115,13 @@ Game.prototype.buildDom = function () {
 
   self.scoreLabel = document.createElement('div');
   self.scoreLabel.setAttribute('class','score-label');
-  self.scoreLabel.innerText = 'score';
+  self.scoreLabel.innerText = 'score:';
   self.scoreContainer.appendChild(self.scoreLabel);
 
   self.scorePrint = document.createElement('div');
   self.scorePrint.setAttribute('class','score-print');
-  self.parentContainer.appendChild(self.scorePrint);
+  self.scorePrint.innerText = SCORE;
+  self.scoreContainer.appendChild(self.scorePrint);
 }
 
 Game.prototype.nextLevel = function () {
@@ -134,6 +146,9 @@ Game.prototype.destroyLevel = function () {
 
 Game.prototype.buildLevel = function () {
   var self = this;
+
+  self.levelContainer.innerText = 'LEVEL ' + (self.level+1);
+  self.scorePrint.innerText = SCORE;
 
   self.flexBoxContainer = document.createElement('div');
   self.flexBoxContainer.setAttribute('class','flex-box');
@@ -170,16 +185,16 @@ Game.prototype.buildLevel = function () {
   self.timeOfLevel = self.levels[self.level].timer;
   self.countdown = setInterval(function() { 
     if (self.timeOfLevel >= 0) {
-      self.timerPrint.innerText = Math.floor(self.timeOfLevel/1000);
+      self.remainingTime = Math.floor(self.timeOfLevel/1000);
+      self.timerPrint.innerText = self.remainingTime;
     } 
     else {  
+      self.score();
       self.onEnded();  
     }
 
   self.timeOfLevel = self.timeOfLevel-1000;
   }, 1000);
-
-  // self.timerPrint.innerText = self.timeOfLevel/1000 + 's';
 
 }
 
@@ -193,5 +208,24 @@ Game.prototype.destroy = function () {
 Game.prototype.onGameOver = function (callback){
   var self = this;
   self.onEnded = callback;
+}
+
+Game.prototype.clickScore = function (){
+  var self = this;
+  self.gameMainContainer.onclick = function () {
+    self.clickCount += 1;
+    // console.log(self.clickCount);
+  }
+
+}
+
+Game.prototype.timeScoreF = function (){
+  var self = this;
+  self.timeScore += Math.floor(self.timeOfLevel/1000);
+}
+
+Game.prototype.score = function () {
+  var self = this;
+  SCORE += Math.floor(10/self.clickCount*self.timeScore*10);
 }
 

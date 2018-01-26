@@ -16,6 +16,7 @@ function shuffle(array) {
 function Game(parentContainer, levels) {
   var self = this;
   
+  self.score = 0;
   self.timeScore = 0;
   self.clickCount = 0;
   self.parentContainer = parentContainer;
@@ -37,7 +38,6 @@ function Game(parentContainer, levels) {
       self.guess1[0] = imgSrc;
       self.guess1[1] = imgParentElement;
       self.count++;
-      // console.log('first image')
     } 
     else {
       if (self.guess1[0] === imgSrc && self.guess1[1] !== imgParentElement){ 
@@ -47,18 +47,13 @@ function Game(parentContainer, levels) {
         self.guess1[1].setAttribute('class', 'hidden');
         imgParentElement.removeEventListener('click', self.handleClickImage);
         self.pairCount++
-        // console.log('That is a pair!!')
           if (self.pairCount === self.images.length/2){
             self.timeScoreF();
-            // console.log(self.timeScore);
-            self.score();
-            console.log(SCORE);
+            console.log(self.timeScore);
+            self.calculateScore();
+            console.log(self.score);
             self.nextLevel();
           } else {}
-          
-        // } 
-        // else if (guess1[0] === imgSrc && guess1[1] === imgParentElement){
-        //   console.log('exactly same image. same div')
       }
       else {
         self.imgTwo = event.target.children[0];
@@ -67,11 +62,9 @@ function Game(parentContainer, levels) {
           self.imgOne.setAttribute('class', 'image-hidden');
           self.imgTwo.setAttribute('class', 'image-hidden');
         }, 200)
-        // console.log('not a pair')
       }
       self.count = 0;
     }
-    // console.log(event.target.children[0]);
   }
 
   self.buildDom();
@@ -120,7 +113,7 @@ Game.prototype.buildDom = function () {
 
   self.scorePrint = document.createElement('div');
   self.scorePrint.setAttribute('class','score-print');
-  self.scorePrint.innerText = SCORE;
+  self.scorePrint.innerText = self.score;
   self.scoreContainer.appendChild(self.scorePrint);
 }
 
@@ -148,7 +141,7 @@ Game.prototype.buildLevel = function () {
   var self = this;
 
   self.levelContainer.innerText = 'LEVEL ' + (self.level+1);
-  self.scorePrint.innerText = SCORE;
+  self.scorePrint.innerText = self.score;
 
   self.flexBoxContainer = document.createElement('div');
   self.flexBoxContainer.setAttribute('class','flex-box');
@@ -189,7 +182,8 @@ Game.prototype.buildLevel = function () {
       self.timerPrint.innerText = self.remainingTime;
     } 
     else {  
-      self.score();
+      self.timeScore = 0;
+      self.calculateScore();
       self.onEnded();  
     }
 
@@ -224,8 +218,8 @@ Game.prototype.timeScoreF = function (){
   self.timeScore += Math.floor(self.timeOfLevel/1000);
 }
 
-Game.prototype.score = function () {
+Game.prototype.calculateScore = function () {
   var self = this;
-  SCORE += Math.floor(10/self.clickCount*self.timeScore*10);
+  self.score += Math.floor(10/self.clickCount*self.timeScore*10);
 }
 

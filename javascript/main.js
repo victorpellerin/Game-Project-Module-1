@@ -1,18 +1,12 @@
 'use strict'
 
-var SCORE;
-
 function main () {
 
   var generalMainContainer = document.querySelector('#site-main');
   var stage;
   var game;
 
-
-
   //----- SPLASH -----//
-
-  //1. Create Splash variables //
   var splashMainContainer;
   var startButton;
   var startButtonBehaviour = function (){
@@ -20,12 +14,9 @@ function main () {
     buildGame();
   }
 
-  //2. Create buildSplash function----------------------// 
   function buildSplash () {
     stage = 'splash';
-    SCORE = 0;
 
-    //2.1. Create DOM elements//
     splashMainContainer = document.createElement('div');
     splashMainContainer.setAttribute('id', 'splash');
 
@@ -37,28 +28,20 @@ function main () {
     startButton.setAttribute('class', 'start-btn');
     startButton.innerText ='Start Game!!';
     
-    //2.2. Append elements to Splash Main Container & SplashMC to Game Main Container //
     splashMainContainer.appendChild(splashTitle);
     splashMainContainer.appendChild(startButton);
 
     generalMainContainer.appendChild(splashMainContainer);
 
-    //2.3. Bind click to Start Button//
     startButton.addEventListener('click', startButtonBehaviour);
   }
 
-  //3. Create destroySplash function//
   function destroySplash (){
     startButton.removeEventListener('click', startButtonBehaviour);
     splashMainContainer.remove();
   } 
 
-
-
-
-
   //----- GAME -----//
-
   var gameMainContainer;
 
   function buildGame() {
@@ -69,23 +52,13 @@ function main () {
       destroyGame();
       buildGameOver();
     })
-    // window.setTimeout( function() {
-    //   destroyGame();
-    //   buildGameOver();
-    // }, 5000);
-
   }
-
 
   function destroyGame() {
     game.destroy();
   }
 
-
-
   //----- GAME OVER -----//
-
-  //1. Create Game Over variables //
   var gameOverMainContainer;
   var playAgainButton;
   var playAgainButtonBehaviour = function (){
@@ -93,13 +66,9 @@ function main () {
     buildSplash();
   }
 
-
   function buildGameOver () {
     stage = 'gameOver';
 
-    if (isNaN(SCORE)){SCORE = 0};
-
-    //2.1. Create DOM elements//
     gameOverMainContainer = document.createElement('div');
     gameOverMainContainer.setAttribute('id', 'game-over');
 
@@ -110,7 +79,7 @@ function main () {
 
     var yourScore = document.createElement('div');
     yourScore.setAttribute('class', 'your-score');
-    yourScore.innerText = 'your score: ' + SCORE;
+    yourScore.innerText = 'your score: ' + game.score;
     gameOverMainContainer.appendChild(yourScore);
 
 
@@ -125,15 +94,12 @@ function main () {
     playAgainButton.addEventListener('click', playAgainButtonBehaviour);
   }
 
-  //3. Create destroyGameOver function//
   function destroyGameOver (){
     playAgainButton.removeEventListener('click', playAgainButtonBehaviour);
     gameOverMainContainer.remove();
   } 
   
   buildSplash();
-
-
 
 }
 
